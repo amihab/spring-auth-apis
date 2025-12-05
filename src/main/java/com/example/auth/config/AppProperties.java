@@ -16,6 +16,14 @@ public class AppProperties {
     private String name;
     private List<Product> products;
     private JwtProps JWT;
+    private LoginProps login;
+
+    @Setter
+    @Getter
+    public static class LoginProps {
+        private String username;
+        private String password;
+    }
 
     @Getter
     @Setter

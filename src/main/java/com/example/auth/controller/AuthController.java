@@ -1,5 +1,6 @@
 package com.example.auth.controller;
 
+import com.example.auth.config.AppProperties;
 import com.example.auth.dto.LoginRequest;
 import com.example.auth.dto.LoginResponse;
 import com.example.auth.util.JwtUtil;
@@ -14,10 +15,18 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    private final AppProperties appProperties;
+
+    public AuthController(AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         // Simple hardcoded validation (replace with real authentication)
-        if ("root".equals(request.getUsername()) && "admin".equals(request.getPassword())) {
+        String username = appProperties.getLogin().getUsername();
+        String password = appProperties.getLogin().getPassword();
+        if (username.equals(request.getUsername()) && password.equals(request.getPassword())) {
             String token = jwtUtil.generateToken(request.getUsername());
             return ResponseEntity.ok(new LoginResponse(token));
         }
