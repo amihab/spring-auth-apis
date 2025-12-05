@@ -1,5 +1,6 @@
 package com.example.auth.util;
 
+import com.example.auth.config.AppProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -15,11 +16,13 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET = "mySecretKeyForJWTTokenGenerationAndValidation123456789";
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 hours
+    private final AppProperties appProperties;
+    public  JwtUtil(AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET.getBytes());
+        return Keys.hmacShaKeyFor(appProperties.getJWT().getSecret().getBytes());
     }
 
     public String generateToken(String username) {
@@ -32,7 +35,7 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + appProperties.getJWT().getExpiration()))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
