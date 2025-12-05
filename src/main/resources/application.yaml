@@ -1,8 +1,8 @@
 app:
   name: "spring-auth-apis"
   login:
-    username: "admin"
-    password: "admin123"
+    username: "root"
+    password: "admin"
   JWT:
     secret: "mySecretKeyForJWTTokenGenerationAndValidation123456789"
     expiration: 36000
